@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>690703500010-5ft9n0rkckm43feu7p0lteip0kvqc1sl.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.690703500010-5ft9n0rkckm43feu7p0lteip0kvqc1sl</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBfRNpAHLk3McKJt0rFkNtl63UMXFUBD9E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>690703500010</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.jabberApp</string>
+	<key>PROJECT_ID</key>
+	<string>jabber-flutter-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>jabber-flutter-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:690703500010:ios:fdaa57ac66bff9e8534d93</string>
+</dict>
+</plist>
