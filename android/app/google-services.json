@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "690703500010",
+    "project_id": "jabber-flutter-app",
+    "storage_bucket": "jabber-flutter-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690703500010:android:3032276d25f86ff2534d93",
+        "android_client_info": {
+          "package_name": "com.example.jabber_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690703500010-8colqqd2ijvrgopnul15n1tc27mkiddl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSag0yXB7wTh3hIL58GogmYjPBRF0JtgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690703500010-8colqqd2ijvrgopnul15n1tc27mkiddl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
