@@ -1,7 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jabber_app/screens/auth_screen.dart';
 import 'package:jabber_app/screens/chat_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:jabber_app/static/Palette.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -14,9 +20,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Jabber',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+          primarySwatch: Palette.blue,
+          backgroundColor: Palette.blue,
+          errorColor: Colors.red,
+          buttonTheme: ButtonTheme.of(context).copyWith(
+              buttonColor: Palette.blue,
+              textTheme: ButtonTextTheme.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ))),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.hasData) {
+            return ChatScreen();
+          }
+          return AuthScreen();
+        },
       ),
-      home: ChatScreen(),
     );
   }
 }
