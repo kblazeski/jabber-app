@@ -22,7 +22,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String email,
     String userName,
     String password,
-    File image,
+    File? image,
     bool isLogin,
     BuildContext btx,
   ) async {
@@ -48,7 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_images')
             .child(authResult.user!.uid + '.jpg');
 
-        final uploadTask = ref.putFile(image);
+        final uploadTask = ref.putFile(image!);
 
         final url = await (await uploadTask).ref.getDownloadURL();
 
