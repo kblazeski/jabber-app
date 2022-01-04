@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jabber_app/service/firebase_service.dart';
 
 class NewMessage extends StatefulWidget {
-  final CollectionReference<Map<String, dynamic>> messagesEndpoint;
   const NewMessage({
     Key? key,
-    required this.messagesEndpoint,
   }) : super(key: key);
 
   @override
@@ -19,20 +18,7 @@ class _NewMessageState extends State<NewMessage> {
 
   void _sendMessage() async {
     // FocusScope.of(context).unfocus();
-    final user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .get();
-    widget.messagesEndpoint.add(
-      {
-        'text': _enteredMessage,
-        'createdAt': Timestamp.now(),
-        'userId': user!.uid,
-        'username': userData['username'],
-        'userImage': userData['image_url']
-      },
-    );
+    FirebaseService.addNewMessageToChat(_enteredMessage);
     _controller.clear();
   }
 

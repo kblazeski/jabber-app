@@ -1,18 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
-  final String username;
-  final String userPicture;
-  final String userId;
-  final void Function(String selectedUserId,BuildContext context) selectUserForChatting;
-  UserCard({
+  final user;
+  final void Function(dynamic user, BuildContext context) selectUserForChatting;
+  const UserCard({
     Key? key,
-    required this.userId,
-    required this.username,
-    required this.userPicture,
+    required this.user,
     required this.selectUserForChatting,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -22,15 +18,15 @@ class UserCard extends StatelessWidget {
           height: 50,
           width: 50,
           child: CircleAvatar(
-            backgroundImage: NetworkImage(userPicture),
+            backgroundImage: NetworkImage(user['image_url']),
           ),
         ),
         title: Text(
-          username,
+          user['username'],
           style: TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
         ),
-        onTap: () => selectUserForChatting(userId,context),
+        onTap: () => selectUserForChatting(user, context),
       ),
     );
   }
