@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jabber_app/screens/auth_screen.dart';
 import 'package:jabber_app/screens/chat_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:jabber_app/screens/users_screen.dart';
 import 'package:jabber_app/static/Palette.dart';
 
 void main() async {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {
           if (userSnapshot.hasData) {
-            return ChatScreen();
+            return UsersScreen();
           }
           return AuthScreen();
         },

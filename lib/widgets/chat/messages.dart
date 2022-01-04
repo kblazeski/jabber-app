@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:jabber_app/widgets/chat/message_bubble.dart';
 
 class Messages extends StatelessWidget {
-  const Messages({Key? key}) : super(key: key);
+  final CollectionReference<Map<String, dynamic>> messagesEndpoint;
+  const Messages({
+    Key? key,
+    required this.messagesEndpoint,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance
-          .collection('chat')
+      stream: messagesEndpoint
           .orderBy(
             'createdAt',
             descending: true,

@@ -3,7 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
-  const NewMessage({Key? key}) : super(key: key);
+  final CollectionReference<Map<String, dynamic>> messagesEndpoint;
+  const NewMessage({
+    Key? key,
+    required this.messagesEndpoint,
+  }) : super(key: key);
 
   @override
   _NewMessageState createState() => _NewMessageState();
@@ -20,7 +24,7 @@ class _NewMessageState extends State<NewMessage> {
         .collection('users')
         .doc(user!.uid)
         .get();
-    FirebaseFirestore.instance.collection('chat').add(
+    widget.messagesEndpoint.add(
       {
         'text': _enteredMessage,
         'createdAt': Timestamp.now(),

@@ -6,10 +6,15 @@ import 'package:jabber_app/widgets/chat/messages.dart';
 import 'package:jabber_app/widgets/chat/new_message.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  final CollectionReference<Map<String, dynamic>> messagesEndpoint;
+  const ChatScreen({
+    Key? key,
+    required this.messagesEndpoint,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // extract Scaffold from the components
     return Scaffold(
       appBar: AppBar(
         title: Text('Jabber'),
@@ -45,9 +50,9 @@ class ChatScreen extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: Messages(),
+              child: Messages(messagesEndpoint: messagesEndpoint),
             ),
-            NewMessage(),
+            NewMessage(messagesEndpoint: messagesEndpoint),
           ],
         ),
       ),
