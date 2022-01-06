@@ -17,7 +17,6 @@ class _NewMessageState extends State<NewMessage> {
   var _enteredMessage = '';
 
   void _sendMessage() async {
-    // FocusScope.of(context).unfocus();
     FirebaseService.addNewMessageToChat(_enteredMessage);
     resetMessage();
     _controller.clear();
@@ -44,6 +43,8 @@ class _NewMessageState extends State<NewMessage> {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(labelText: 'Send a message...'),
+              minLines: 1,
+              maxLines: 3,
               onChanged: handleOnChangeMessage,
             ),
           ),
