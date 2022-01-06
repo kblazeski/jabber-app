@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jabber_app/models/message_data.dart';
 import 'package:jabber_app/service/firebase_service.dart';
 import 'package:jabber_app/widgets/chat/message_bubble.dart';
 
@@ -24,14 +25,10 @@ class Messages extends StatelessWidget {
             reverse: true,
             itemCount: chatDocs.length,
             itemBuilder: (ctx, index) {
-              var currentMessage = chatDocs[index];
+              var currentMessage = MessageData.fromDocument(chatDocs[index]);
               return MessageBubble(
                 key: ValueKey(currentMessage.id),
-                message: currentMessage['text'],
-                username: currentMessage['username'],
-                userImage: currentMessage['userImage'],
-                isCurrentUser:
-                    FirebaseService.isCurrentUser(currentMessage['userId']),
+                messageData: currentMessage,
               );
             });
       },

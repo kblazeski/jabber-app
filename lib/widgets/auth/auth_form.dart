@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:jabber_app/utils/form_validators.dart';
 import 'package:jabber_app/widgets/pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
@@ -35,17 +36,6 @@ class _AuthFormState extends State<AuthForm> {
   void _trySubmit() {
     final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus();
-
-    // TODO: Enable default image for user
-    if (_userImageFile == null && !_isLogin) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please pick and image'),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-      return;
-    }
 
     if (isValid != null && isValid == true) {
       _formKey.currentState?.save();
@@ -83,14 +73,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   TextFormField(
                     key: ValueKey('email'),
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          !value.contains('@')) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
+                    validator: FormValidators.validateEmail,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email address',
@@ -102,13 +85,7 @@ class _AuthFormState extends State<AuthForm> {
                   if (!_isLogin)
                     TextFormField(
                       key: ValueKey('username'),
-                      validator: (value) {
-                        // maybe check characters
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter username';
-                        }
-                        return null;
-                      },
+                      validator: FormValidators.validateUsername,
                       decoration: InputDecoration(
                         labelText: 'Username',
                       ),
@@ -118,12 +95,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   TextFormField(
                     key: ValueKey('password'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 7) {
-                        return 'Password must be at least 7 characters long';
-                      }
-                      return null;
-                    },
+                    validator: FormValidators.validatePassword,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',

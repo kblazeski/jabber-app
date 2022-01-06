@@ -1,30 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jabber_app/models/message_data.dart';
+import 'package:jabber_app/service/firebase_service.dart';
 
 class MessageBubble extends StatelessWidget {
-  final String message;
-  final bool isCurrentUser;
-  final String username;
-  final String userImage;
+  final MessageData messageData;
 
   const MessageBubble({
-    required this.message,
-    required this.username,
-    required this.isCurrentUser,
-    required this.userImage,
+    required this.messageData,
     Key? key,
   }) : super(key: key);
+
+  bool isCurrentUser(MessageData messageData) {
+    return FirebaseService.isCurrentUser(messageData.userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: isCurrentUser(messageData)
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment:
-              isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          mainAxisAlignment: isCurrentUser(messageData)
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
           children: [
             Container(
               margin: EdgeInsets.only(
@@ -33,7 +35,7 @@ class MessageBubble extends StatelessWidget {
                 left: 12,
               ),
               child: Text(
-                username,
+                messageData.username,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -42,28 +44,33 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
         Row(
-          mainAxisAlignment:
-              isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          mainAxisAlignment: isCurrentUser(messageData)
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
           children: [
-            if (!isCurrentUser)
+            if (!isCurrentUser(messageData))
               Container(
                 width: 50,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(userImage),
+                  backgroundImage: messageData.userImage != null
+                      ? NetworkImage(messageData.userImage!)
+                      : null,
                 ),
               ),
             Container(
               decoration: BoxDecoration(
-                color: isCurrentUser
+                color: isCurrentUser(messageData)
                     ? Theme.of(context).primaryColor
                     : Colors.grey[300],
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
-                  bottomLeft:
-                      !isCurrentUser ? Radius.circular(0) : Radius.circular(12),
-                  bottomRight:
-                      isCurrentUser ? Radius.circular(0) : Radius.circular(12),
+                  bottomLeft: !isCurrentUser(messageData)
+                      ? Radius.circular(0)
+                      : Radius.circular(12),
+                  bottomRight: isCurrentUser(messageData)
+                      ? Radius.circular(0)
+                      : Radius.circular(12),
                 ),
               ),
               constraints: BoxConstraints(maxWidth: 240),
@@ -76,17 +83,20 @@ class MessageBubble extends StatelessWidget {
                 horizontal: 8,
               ),
               child: Text(
-                message,
+                messageData.text,
                 style: TextStyle(
-                  color: isCurrentUser ? Colors.white : Colors.black,
+                  color:
+                      isCurrentUser(messageData) ? Colors.white : Colors.black,
                 ),
               ),
             ),
-            if (isCurrentUser)
+            if (isCurrentUser(messageData))
               Container(
                 width: 50,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(userImage),
+                  backgroundImage: messageData.userImage != null
+                      ? NetworkImage(messageData.userImage!)
+                      : null,
                 ),
               ),
           ],

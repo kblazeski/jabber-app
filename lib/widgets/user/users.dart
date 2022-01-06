@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:jabber_app/models/user_data.dart';
 import 'package:jabber_app/service/firebase_service.dart';
 import 'package:jabber_app/screens/chat_screen.dart';
 import 'package:jabber_app/widgets/chat/messages.dart';
 import 'package:jabber_app/widgets/user/user_card.dart';
+import 'package:jabber_app/models/user_data.dart';
 
 class Users extends StatefulWidget {
   const Users({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class Users extends StatefulWidget {
 class _UsersState extends State<Users> {
   String? searchUserText;
 
-  void selectUserToChatWith(dynamic selectedUser, BuildContext context) async {
+  void selectUserToChatWith(UserData selectedUser, BuildContext context) async {
     var currentUserId = FirebaseService.getCurrentUser()!.uid;
     await FirebaseService.setEndPointForUsersChat(
       currentUserId,
@@ -29,7 +31,7 @@ class _UsersState extends State<Users> {
       context,
       MaterialPageRoute(
         builder: (context) => ChatScreen(
-          userToChatWithName: selectedUser['username'],
+          userToChatWithName: selectedUser.username,
         ),
       ),
     );
@@ -71,7 +73,7 @@ class _UsersState extends State<Users> {
                   reverse: false,
                   itemCount: userDocs.length,
                   itemBuilder: (ctx, index) {
-                    var user = userDocs[index];
+                    var user = UserData.fromDocument(userDocs[index]);
                     return !FirebaseService.isCurrentUser(user.id)
                         ? UserCard(
                             key: ValueKey(user.id),
