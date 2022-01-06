@@ -62,7 +62,8 @@ class FirebaseService {
     if (searchText != null) {
       usersQuery = usersCollection
           .where('username', isGreaterThanOrEqualTo: searchText)
-          .where('username', isLessThan: '${searchText}z').limit(10);
+          .where('username', isLessThan: '${searchText}z')
+          .limit(10);
     }
     var usersQueryStream = usersQuery.snapshots();
 
@@ -80,7 +81,7 @@ class FirebaseService {
       {
         'text': message,
         'createdAt': Timestamp.now(),
-        'userId': user!.uid,
+        'userId': user.uid,
         'username': userData['username'],
         'userImage': userData['image_url']
       },
