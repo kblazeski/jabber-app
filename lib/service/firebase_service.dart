@@ -55,15 +55,18 @@ class FirebaseService {
     FirebaseAuth.instance.signOut();
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers(int? numLimit) {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUsers(
+      String? searchText) {
     var usersCollection = FirebaseFirestore.instance.collection("users");
-    var usersCollectionStream;
-    if (numLimit != null) {
-      usersCollectionStream = usersCollection.limit(numLimit).snapshots();
-    } else {
-      usersCollectionStream = usersCollection.snapshots();
+    var usersQuery = usersCollection.limit(10);
+    if (searchText != null) {
+      usersQuery = usersCollection
+          .where('username', isGreaterThanOrEqualTo: searchText)
+          .where('username', isLessThan: '${searchText}z').limit(10);
     }
-    return usersCollectionStream;
+    var usersQueryStream = usersQuery.snapshots();
+
+    return usersQueryStream;
   }
 
   static void addNewMessageToChat(String message) async {
