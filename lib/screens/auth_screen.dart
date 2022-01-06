@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jabber_app/service/firebase_service.dart';
 import 'package:jabber_app/widgets/auth/auth_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -38,28 +39,8 @@ class _AuthScreenState extends State<AuthScreen> {
           password: password,
         );
       } else {
-        authResult = await _auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('user_images')
-            .child(authResult.user!.uid + '.jpg');
-
-        final uploadTask = ref.putFile(image!);
-
-        final url = await (await uploadTask).ref.getDownloadURL();
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(authResult.user!.uid)
-            .set({
-          'username': userName,
-          'email': email,
-          'image_url': url,
-        });
+        authResult =
+            await FirebaseService.createUser(email, password, image, userName);
       }
     } on FirebaseAuthException catch (err) {
       var message = 'An error occured please check your credentials!';
@@ -67,6 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (err.message != null) {
         message = err.message!;
       }
+
       Scaffold.of(btx).showSnackBar(
         SnackBar(
           content: Text(message),
@@ -77,7 +59,6 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
-      print(err);
       setState(() {
         _isLoading = false;
       });

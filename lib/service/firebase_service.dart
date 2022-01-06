@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseService {
   static late CollectionReference<Map<String, dynamic>> _chatEndpointForUsers;
@@ -77,15 +80,53 @@ class FirebaseService {
         .doc(user!.uid)
         .get();
 
-    _chatEndpointForUsers.add(
-      {
-        'text': message,
-        'createdAt': Timestamp.now(),
-        'userId': user.uid,
-        'username': userData['username'],
-        'userImage': userData['image_url']
-      },
+    var messageMap = {
+      'text': message,
+      'createdAt': Timestamp.now(),
+      'userId': user.uid,
+      'username': userData['username'],
+    };
+
+    if (userData.data()!.containsKey('image_url')) {
+      messageMap.putIfAbsent('userImage', () => userData['image_url']);
+    }
+
+    _chatEndpointForUsers.add(messageMap);
+  }
+
+  static Future<UserCredential> createUser(
+    String email,
+    String password,
+    File? image,
+    String userName,
+  ) async {
+    UserCredential authResult =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
     );
+
+    var userMap = {'username': userName, 'email': email};
+    String? imageUrl;
+
+    if (image != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('user_images')
+          .child(authResult.user!.uid + '.jpg');
+
+      final uploadTask = ref.putFile(image);
+
+      imageUrl = await (await uploadTask).ref.getDownloadURL();
+      userMap.putIfAbsent('image_url', () => imageUrl!);
+    }
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(authResult.user!.uid)
+        .set(userMap);
+
+    return authResult;
   }
 
   static User? getCurrentUser() {

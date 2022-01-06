@@ -15,10 +15,9 @@ class UserImagePicker extends StatefulWidget {
 class _UserImagePickerState extends State<UserImagePicker> {
   File? _pickedImage;
 
-  // TODO: Enable user to pick image from gallery
-  void _pickImage() async {
+  void _pickImage(bool isCamera) async {
     final pickedImageFile = await ImagePicker.platform.pickImage(
-      source: ImageSource.camera,
+      source: isCamera ? ImageSource.camera : ImageSource.gallery,
       imageQuality: 50,
       maxWidth: 150,
     );
@@ -40,10 +39,21 @@ class _UserImagePickerState extends State<UserImagePicker> {
           backgroundImage:
               _pickedImage != null ? FileImage(_pickedImage!) : null,
         ),
-        FlatButton.icon(
-          onPressed: _pickImage,
-          icon: Icon(Icons.image),
-          label: Text('Add image'),
+        // verticaly center this
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FlatButton.icon(
+              onPressed: () => _pickImage(true),
+              icon: Icon(Icons.photo_camera),
+              label: Text('Take a picture'),
+            ),
+            FlatButton.icon(
+              onPressed: () => _pickImage(false),
+              icon: Icon(Icons.image),
+              label: Text('Add image'),
+            ),
+          ],
         ),
       ],
     );
